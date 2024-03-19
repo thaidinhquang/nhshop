@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>check out</title>
+    <link rel="stylesheet" href="style.scss" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://necolas.github.io/normalize.css/8.0.1/normalize.css"
+    />
+    <link rel="stylesheet" href="style.scss" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header-inner">
+          <a href="" class="header__logo">
+            <img src="../../assets/logo.svg" alt="" />
+          </a>
+          <div class="button-mobile"><button>=</button></div>
+          <nav class="main-menu">
+            <ul class="main-menu__list">
+              <li class="main-menu__item">
+                  <a href="./index.html" class="main-menu__link">Home</a>
+              </li>
+              <li class="main-menu__item">
+                  <a href="./shop/shop.html" class="main-menu__link">Shop</a>
+              </li>
+              <li class="main-menu__item">
+                  <a href="" class="main-menu__link">About</a>
+              </li>
+              <li class="main-menu__item">
+                  <a href="" class="main-menu__link">Contact</a>
+              </li>
+          </ul>
+          </nav>
+          <div class="header-items">
+            <div class="header-item-user">
+                <a href="/login/index.html">   <span><img src="../../assets/icons/1.svg" /></span></a>
+            </div>
+            <div class="header-item-user">
+              <span><img src="../../assets/icons/2.svg" /></span>
+            </div>
+            <div class="header-item-user">
+              <span><img src="../../assets/icons/3.svg" /></span>
+            </div>
+            <div class="header-item-user">
+                <a href="/cart/index.html"> <span><img src="../../assets/icons/4.svg" /></span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!--Start _ Banner -->
+    <section class="banner">
+      <img
+        src="https://picsum.photos/id/10/1440/500"
+        alt=""
+        class="banner__img"
+      />
+    </section>
+    <!--Start _ Billing  -->
+    <section class="container">
+      <div class="Billing_Details">
+        <!--Start _ Billing-Detail -->
+        <div class="section-heading">
+          <h2 class="section-heading__title">Billing details</h2>
+          <div class="Billing_name">
+            <div class="first_name">
+              <label for="" class="label_name">First name</label>
+              <input type="text" class="input_first_name" />
+            </div>
+            <div class="last_name">
+              <label for="" class="label_name">Last name</label>
+              <input type="text" class="input_last_name" />
+            </div>
+            <!-- <label for="" class="label_name">Last name</label>
+            <input type="text" class="input_last_name" /> -->
+          </div>
+          <label for="" class="label_name">Company Name (Optional)</label>
+          <input type="text" class="input_company_name" />
+          <label for="" class="label_name">Country / Region</label>
+          <select name="Country" class="select_country">
+            <option value="Sri Lanka">Sri Lanka</option>
+            <option value="Viet Nam">Viet Nam</option>
+          </select>
+          <label for="" class="label_name">Street address</label>
+          <input type="text" class="input_address" />
+          <label for="" class="label_name">Town / City</label>
+          <input type="text" class="input_city" />
+          <label for="" class="label_name">Province</label>
+          <select name="Province" class="input_province">
+            <option value="Western Province">Western Province</option>
+            <option value="Nord Province">Western Province</option>
+          </select>
+          <label for="" class="label_name">ZIP code</label>
+          <input type="text" class="input_code" />
+          <label for="" class="label_phone">Phone</label>
+          <input type="text" class="input_phone" />
+          <label for="" class="label_name">Email address</label>
+          <input type="text" class="input_email" />
+          <input
+            type="text"
+            placeholder="Additional information"
+            class="input_infor"
+          />
+        </div>
+
+        <!--End _ Billing-Heading -->
+
+        <!--Start _ Billing-Submit -->
+        <div class="Billing-Submit">
+          <div class="Billing-Submit-infor">
+            <!--  -->
+            <table class="table">
+              <tr>
+                <th class="product_title"><h3>Product</h3></th>
+                <th class="subtotal_title"><h3>Subtotal</h3></th>
+              </tr>
+              <tr>
+                <td class="product_title_detail">
+                  <p class="product_title_detail_sofa">
+                    Asgaard sofa<span class="quantity"> x 1</span>
+                  </p>
+                </td>
+                <td class="subtotal_title_detail"><p>25.000.000đ</p></td>
+              </tr>
+              <tr>
+                <td class="product_title_detail"><p>Subtotal</p></td>
+                <td class="subtotal_title_detail"><p>25.000.000đ</p></td>
+              </tr>
+              <tr>
+                <td class="product_title_detail"><p>Total</p></td>
+                <td class="subtotal_title_detail">
+                  <p class="subtotal_title_detail_total">250.00.000đ</p>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <hr />
+          <div class="select-item1">
+            <input type="radio" name="Direct Bank Transfer" /><span
+              class="service-item1-radio-first"
+              >Direct Bank Transfer</span
+            >
+          </div>
+          <div class="select-item1-box">
+            <span class="select-item1-text">
+              Make your payment directly into our bank account. Please use your
+              Order ID as the payment reference. Your order will not be shipped
+              until the funds have cleared in our account.
+            </span>
+          </div>
+          <div class="select-item1">
+            <input type="radio" name="Direct Bank Transfer" /><span
+              class="Direct_Bank_Transfer"
+              >Direct Bank Transfer</span
+            >
+          </div>
+          <div class="select-item1">
+            <input type="radio" name="Direct Bank Transfer" /><span
+              class="Direct_Bank_Transfer"
+              >Cash On Delivery</span
+            >
+          </div>
+          <div class="select-item1-box2">
+            <p>
+              Your personal data will be used to support your experience
+              throughout this website, to manage access to your account, and for
+              other purposes described in our <strong>privacy policy.</strong>
+            </p>
+          </div>
+          <div class="flex_button">
+            <button class="button"><p>Place order</p></button>
+          </div>
+        </div>
+        <!--End _ Billing-Submit -->
+      </div>
+    </section>
+    <!--Services -->
+    <section class="services">
+      <div class="container-fluid">
+        <div class="service-list">
+          <div class="service-item">
+            <img src="../../assets/icons/10.svg" class="service__image" />
+            <div class="service-info">
+              <h4 class="service__name">High Quality</h4>
+              <p class="service__description">crafted from top materials</p>
+            </div>
+          </div>
+          <!--End service-item-->
+          <div class="service-item">
+            <img src="../../assets/icons/11.svg" class="service__image" />
+            <div class="service-info">
+              <h4 class="service__name">High Quality</h4>
+              <p class="service__description">crafted from top materials</p>
+            </div>
+          </div>
+          <!--End service-item-->
+          <div class="service-item">
+            <img src="../../assets/icons/12.svg" class="service__image" />
+            <div class="service-info">
+              <h4 class="service__name">High Quality</h4>
+              <p class="service__description">crafted from top materials</p>
+            </div>
+          </div>
+          <!--End service-item-->
+          <div class="service-item">
+            <img src="../../assets/icons/13.svg" class="service__image" />
+            <div class="service-info">
+              <h4 class="service__name">High Quality</h4>
+              <p class="service__description">crafted from top materials</p>
+            </div>
+          </div>
+          <!--End service-item-->
+        </div>
+      </div>
+    </section>
+    <!--End .services-->
+    <!--End _ Billing  -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-list">
+          <div class="footer-item">
+            <img src="../../assets/logo.svg" alt="" />
+            <p class="footer__address">
+              400 University Drive Suite 200 Coral Gables, FL 33134 USA
+            </p>
+          </div>
+          <div class="footer-nav">
+            <div class="footer-item">
+              <h2 class="footer__title">Links</h2>
+              <ul class="footer-menu-list">
+                <li class="footer-menu-item">
+                  <a href="" class="footer-menu-link">Home</a>
+                </li>
+                <li class="footer-menu-item">
+                  <a href="" class="footer-menu-link">Shop</a>
+                </li>
+                <li class="footer-menu-item">
+                  <a href="" class="footer-menu-link">Blog</a>
+                </li>
+                <li class="footer-menu-item">
+                  <a href="" class="footer-menu-link">Contact</a>
+                </li>
+              </ul>
+            </div>
+            <div class="footer-item">
+              <h2 class="footer__title">Help</h2>
+              <ul class="footer-menu-list">
+                <li class="footer-menu-item">
+                  <a href="" class="footer-menu-link">Payment Options</a>
+                </li>
+                <li class="footer-menu-item">
+                  <a href="" class="footer-menu-link">Returns</a>
+                </li>
+                <li class="footer-menu-item">
+                  <a href="" class="footer-menu-link">Privacy Policies</a>
+                </li>
+                <li class="footer-menu-item">
+                  <a href="" class="footer-menu-link">Contact</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="footer-item">
+            <h2 class="footer__title">Newsletter</h2>
+            <form action="" class="newsletter">
+              <input
+                type="text"
+                class="newsletter__input"
+                placeholder="Enter Your Email Address"
+              />
+              <button class="newsletter__btn">Subscribe</button>
+            </form>
+          </div>
+        </div>
+        <p class="copyright">2023 furino. All rights reverved</p>
+      </div>
+    </footer>
+  </body>
+</html>

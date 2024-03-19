@@ -1,0 +1,177 @@
+// Variables
+$primary-color: #b88e2f;
+$secondary-color: #000;
+$button-bg-color: #f9f1e7;
+$button-hover-color: darkblue;
+$button-gg-hover-color: cornflowerblue;
+
+// Mixins
+@mixin button-styles {
+  font-size: 20px;
+  font-weight: 700;
+  height: 64px;
+  border-radius: 15px;
+}
+
+// CSS
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.container {
+  max-width: 1268px;
+  margin: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.form-container {
+  position: relative;
+  width: 800px;
+  height: 600px;
+  margin: 0 auto;
+}
+
+.close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 30px;
+  color: $secondary-color;
+  cursor: pointer;
+}
+
+.form-title {
+  color: $primary-color;
+  font-size: 30px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30px;
+  padding-top: 54px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  color: $primary-color;
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.form-group input {
+  border-radius: 15px;
+  border: 1px solid $secondary-color;
+  margin-bottom: 14px;
+  width: 100%;
+  height: 60px;
+
+  @media only screen and (min-width: 46.25em) and (max-width: 63.9375em) {
+    border-radius: 5px;
+    height: 46px;
+  }
+
+  @media only screen and (max-width: 46.1875em) {
+    border-radius: 5px;
+    height: 39px;
+  }
+}
+
+form {
+  width: 75%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.button {
+  width: 149px;
+  background-color: $button-bg-color;
+  color: $secondary-color;
+  cursor: pointer;
+  margin-top: 16px;
+  border: none;
+  @include button-styles;
+
+  &:hover {
+    background-color: $button-hover-color;
+  }
+}
+
+.social-button {
+  margin-top: 25px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 44px;
+  padding-bottom: 33px;
+}
+
+.btn a img {
+  margin-right: 5px;
+}
+
+.btn-fb {
+  background-color: #0171d3;
+  border: none;
+  width: 191px;
+  cursor: pointer;
+  color: #fff;
+
+  &:hover {
+    background-color: $button-hover-color;
+  }
+}
+
+.btn a {
+  display: flex;
+  text-decoration: none;
+  justify-content: center;
+}
+
+.btn-gg a {
+  color: $secondary-color;
+}
+
+.btn-gg {
+  background-color: #fff;
+  border: 1px solid $secondary-color;
+  color: $secondary-color;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 167px;
+
+  &:hover {
+    background-color: $button-gg-hover-color;
+  }
+}
+
+// Responsive
+// Mobile & tablet: width < 1024
+@media only screen and (max-width: 63.9375em) {
+  .form-container {
+    width: 90%;
+    height: auto;
+    margin: 0 auto;
+  }
+  .button {
+    font-size: 16px;
+    font-weight: 500;
+    height: 44px;
+  }
+  .social-button {
+    margin-top: 25px;
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    padding: 0 44px;
+  }
+}
