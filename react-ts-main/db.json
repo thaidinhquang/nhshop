@@ -1,0 +1,67 @@
+{
+  "products": [
+    {
+      "id": "9be2",
+      "name": "sản phâm 1",
+      "price": "100",
+      "image": "https://picsum.photos/200/300",
+      "description": "mô tả sản phâm 1   ",
+      "categoryID": "3",
+      "stock": "12"
+    },
+    {
+      "id": "a975",
+      "name": "sane phẩm 2",
+      "price": "200",
+      "image": "https://picsum.photos/200/300",
+      "description": "Mô tả sản phẩm 2",
+      "categoryID": "2",
+      "stock": "45"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "email": "admin@gmail.com",
+      "password": "$2a$10$Qn0yoQAc/ROTEHVW85LIze/Ja0pXlhN/bbB5CczdUv8XSDvzWnO1y",
+      "name": "Admin1",
+      "role": "1"
+    },
+    {
+      "email": "thai1@gmai.com",
+      "password": "$2a$10$zPLtqyR67eyOj.4j3WN7MeHNO6.0cFYU1/Bvs6A.U4.KvCxXHFcam",
+      "name": "thaidepzai",
+      "role": 2,
+      "id": 12
+    },
+    {
+      "email": "thai1234@gmail.com",
+      "password": "$2a$10$e0PPyaRi9BNy8cd4J643fe87ULgjcndU3q17txQ9yPYwtpOISKKkS",
+      "name": "23232323",
+      "role": 2,
+      "id": 14
+    }
+  ],
+  "category": [
+    {
+      "name": "danh mục 6",
+      "id": 3
+    },
+    {
+      "name": "danh mục 4",
+      "id": 4
+    },
+    {
+      "name": "thai dinh",
+      "image": "https://picsum.photos/120/200",
+      "id": 5
+    }
+  ],
+  "cart": [
+    {
+      "product": "a975",
+      "quantity": 1,
+      "id": 1
+    }
+  ]
+}
