@@ -1,0 +1,146 @@
+{
+  "cart": [
+    {
+      "user": 2,
+      "product": 4,
+      "quantity": 1,
+      "id": 1
+    },
+    {
+      "product": 3,
+      "quantity": 1,
+      "id": 2
+    },
+    {
+      "product": 3,
+      "quantity": 1,
+      "id": 3
+    },
+    {
+      "product": 3,
+      "quantity": 1,
+      "id": 4
+    },
+    {
+      "product": 3,
+      "quantity": 1,
+      "id": 5
+    }
+  ],
+  "users": [
+    {
+      "id": 2,
+      "name": "Admin",
+      "email": "dinhquangthai@gmail.com",
+      "password": "dinhquangthai123",
+      "role": 1,
+      "active": true
+    },
+    {
+      "email": "thai1237@gmail.com",
+      "password": "$2a$10$mx15dta.EAaGyStH96/GxOleBOAEvxJWy.RFk3FAnlJA2aqeIKtC.",
+      "role": 0,
+      "active": true,
+      "name": "Product 3",
+      "id": 15
+    },
+    {
+      "email": "thai123@gmail.com",
+      "password": "$2a$10$QEzkq/UGKZ4..t5xCvPjZOF3q8kNG3tzJUNLI44Fh28iFjUGedsDi",
+      "role": 0,
+      "active": true,
+      "name": "thai",
+      "id": 16
+    },
+    {
+      "email": "dinhquangthai1@gmail.com",
+      "password": "$2a$10$WoJoBuBfoDwGsaqnyawhcuOWo3yE3j8A6W1Wk.sXNydIL4xs1tSA2",
+      "role": 0,
+      "active": true,
+      "name": "thai dinh",
+      "id": 17
+    }
+  ],
+  "category": [
+    {
+      "id": 1,
+      "name": "Laptop2",
+      "image": "https://picsum.photos/id/11/300/300",
+      "description": "Thiên nhiên đẹp thật đấy nhưng sự phẫn nộ của thiên nhiên cũng rất dữ dội. ",
+      "createdAt": "2022-01-01",
+      "active": false
+    },
+    {
+      "name": "Laptop1",
+      "image": "https://picsum.photos/id/11/300/300",
+      "description": "Thiên nhiên đẹp thật đấy nhưng sự phẫn nộ của thiên nhiên cũng rất dữ dội. ",
+      "id": 10,
+      "createdAt": "2022-01-01",
+      "active": false
+    },
+    {
+      "active": false,
+      "name": "san pham Ae",
+      "image": "https://picsum.photos/200/300",
+      "description": "232323232",
+      "id": 11
+    },
+    {
+      "active": true,
+      "name": "san pham Ae3",
+      "image": "https://picsum.photos/200/300",
+      "description": "2323",
+      "id": 12
+    }
+  ],
+  "products": [
+    {
+      "id": 100,
+      "title": "Dien thoai 1",
+      "description": "Mỗi sáng, tôi bước trên con đường quen để đến trường. Hai bên đường ẩn chứa nhiều bí mật đẹp",
+      "price": "12",
+      "discountPercentage": 6,
+      "rating": 4.44,
+      "stock": 34,
+      "brand": "Apple",
+      "category": "12",
+      "thumbnail": "https://picsum.photos/id/11/300/300",
+      "images": [
+        "https://picsum.photos/id/11/300/300"
+      ],
+      "active": true
+    },
+    {
+      "id": 3,
+      "title": "Dien thoai 2",
+      "description": "Mỗi sáng, tôi bước trên con đường quen để đến trường. Hai bên đường ẩn chứa nhiều bí mật đẹp",
+      "price": 13,
+      "discountPercentage": 6,
+      "rating": 4.09,
+      "stock": 36,
+      "brand": "Samsung",
+      "category": "1",
+      "thumbnail": "https://picsum.photos/id/11/300/300",
+      "images": [
+        "https://picsum.photos/id/11/300/300"
+      ],
+      "active": false
+    },
+    {
+      "id": 4,
+      "title": "Dien thoai 3",
+      "description": "Mỗi sáng, tôi bước trên con đường quen để đến trường. Hai bên đường ẩn chứa nhiều bí mật đẹp",
+      "price": 14,
+      "discountPercentage": "1",
+      "rating": 4.3,
+      "stock": 123,
+      "brand": "OPPO",
+      "category": "1",
+      "thumbnail": "https://picsum.photos/id/11/300/300",
+      "images": [
+        "https://picsum.photos/id/11/300/300"
+      ],
+      "active": true
+    }
+  ]
+}
