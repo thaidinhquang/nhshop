@@ -6,7 +6,6 @@ export interface IProduct {
     price: number
     gallery?: string[]
     quantity: number,
-   
     description: string
     discount: number
     featured: boolean

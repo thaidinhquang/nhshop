@@ -1,269 +1,107 @@
-import { Button } from "@/components/ui/button";
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+
+import { useCategoryQuery } from "@/common/hooks/useCategoryQuery";
+import { ICategory } from "@/common/types/category";
 import { IProduct } from "@/common/types/product";
-import { editProduct, getProductById } from "@/services/product";
-import { joiResolver } from "@hookform/resolvers/joi";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import Joi from "joi";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { useToast } from "@/components/ui/use-toast";
-import { useEffect } from "react";
+import instance from "@/configs/axios";
+import { editProduct } from "@/services/product";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 
-type Inputs = {
-    name: string;
-    category?: string;
-    price: number;
-    // gallery?: string[];
-    image: string;
-    description: string;
-    discount: number;
-    featured: boolean;
-    countInStock: number;
-    quantity: number;
-};
-// const productSchema = Joi.object({
-//     name: Joi.string().required(),
-//     price: Joi.number().required(),
-//     category: Joi.string(),
-//     // gallery: Joi.array().items(Joi.string()),
-//     image: Joi.string(),
-//     description: Joi.string(),
-//     discount: Joi.number(),
-//     featured: Joi.boolean(),
-//     countInStock: Joi.number(),
-// });
 
-const ProductEditPage = () => {
-    const navigate = useNavigate();
-    const { toast } = useToast();
+const ProductEdit = () => {
+    const queryClient = useQueryClient();
+    const {data: categories} = useCategoryQuery();
     const { id } = useParams();
-    const form = useForm<Inputs>();
-    const { data: categories } = useQuery({
-        queryKey: ["CATEGORY_LIST"],
-        queryFn: async () => {
-            const { data } = await axios.get(
-                "http://localhost:8080/api/v1/categories",
-            );
-            return data;
+  const { 
+    register,
+    handleSubmit,
+    formState: {errors},
+    reset
+    } = useForm({
+        defaultValues: {
+            name: "",
+            price: 0,
+            category: "",
+            image: "",
+            description: "",
+            discount: 0,
+            featured: false,
+            countInStock: 0,
         },
-        staleTime: 60000, // Thời gian "cũ" được đặt là 1 phút (60000 miligiây)
-    });
-    const mutation = useMutation({
+    });  
+    const navigate = useNavigate()
+    useQuery({
+        queryKey: ['PRODUCT_KEY', id],
+        queryFn: async () => {
+            const res =  await instance.get(`/products/${id}`)
+            reset(res.data)
+            return res.data
+        }
+    })
+    const {mutate} = useMutation({
         mutationFn: async (product: IProduct) => {
-            const data = await editProduct({ ...product, _id: id });
-            console.log(data);
+            const { data } = await editProduct(product);
             return data;
         },
         onSuccess: () => {
-            toast({
-                title: "Sửa sản phẩm thành công",
-                variant: "success",
-            });
-            navigate("/admin/products");
+        queryClient.invalidateQueries({
+            queryKey: ['PRODUCT_KEY']
+        })
+          alert('Cập nhật thành công !');
+          navigate('/admin/products')
         },
     });
 
-    useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                if (id) {
-                    const product = await getProductById(id);
-                    form.reset(product);
-                }
-            } catch (error) {
-                console.error("Error fetching product:", error);
-            }
-        };
-        fetchProduct();
-    }, [id, form]);
+    const onSubmit = (data: any) => {
+        mutate(data);
+    }
 
-    const onSubmit: SubmitHandler<Inputs> = (product) => {
-        mutation.mutate(product);
-    };
     return (
         <div>
-            <h2 className="text-2xl font-semibold">Chỉnh sửa sản phẩm</h2>
-            <hr className="my-5" />
-            <Form {...form}>
-                <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-8"
-                >
-                    <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel
-                                    className="bold-label"
-                                    htmlFor="name"
-                                >
-                                    Name
-                                </FormLabel>
-                                <FormControl>
-                                    <Input {...field} id="name" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    ></FormField>
-                    <FormField
-                        control={form.control}
-                        name="price"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel
-                                    className="bold-label"
-                                    htmlFor="price"
-                                >
-                                    Giá
-                                </FormLabel>
-                                <FormControl>
-                                    <Input {...field} id="price" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    ></FormField>
-                    <FormField
-                        control={form.control}
-                        name="category"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel
-                                    className="bold-label"
-                                    htmlFor="category"
-                                >
-                                    Category
-                                </FormLabel>
-                                <FormControl>
-                                    <select {...field} id="category">
-                                        <option value="">
-                                            Select a category
-                                        </option>
-
-                                        {categories?.map(
-                                            (category: {
-                                                _id?: number;
-                                                name: string;
-                                            }) => (
-                                                <option
-                                                    key={category._id}
-                                                    value={category._id}
-                                                >
-                                                    {category.name}
-                                                </option>
-                                            ),
-                                        )}
-                                    </select>
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    ></FormField>
-                    {/* <FormField
-                        control={form.control}
-                        name="gallery"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className="bold-label" htmlFor="gallery">Gallery</FormLabel>
-                                <FormControl>
-                                    <Input {...field} id="gallery" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    /> */}
-                    <FormField
-                        control={form.control}
-                        name="image"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel
-                                    className="bold-label"
-                                    htmlFor="image"
-                                >
-                                    Image
-                                </FormLabel>
-                                <FormControl>
-                                    <Input {...field} id="image" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="description"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel
-                                    className="bold-label"
-                                    htmlFor="description"
-                                >
-                                    Description
-                                </FormLabel>
-                                <FormControl>
-                                    <Input {...field} id="description" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="discount"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel
-                                    htmlFor="discount"
-                                    className="bold-label"
-                                >
-                                    Discount
-                                </FormLabel>
-                                <FormControl>
-                                    <Input {...field} id="discount" />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="featured"
-                        render={({ field }) => (
-                            <FormItem className="flex flex-row items-start p-4 space-x-3 space-y-0 border rounded-md">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                    />
-                                </FormControl>
-                                <div className="space-y-1 leading-none">
-                                    <FormLabel>Featured?</FormLabel>
-                                </div>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <Button variant="destructive" type="submit">
-                        Submit
-                    </Button>
-                </form>
-            </Form>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <select {...register('category', {required: true})} className='w-full my-4 border-[1px] border-solid border-[#ccc]'>
+                <option value="">--- Chọn danh mục ---</option>
+                {categories && categories.map((item: ICategory, index: number) => (
+                    <option key={index} value={item._id}>{item.name}</option>
+                ))}
+                </select>
+                <div className="my-4">
+                    <label htmlFor="" className='block '>Name</label>
+                    <input className='w-full pl-2 h-[50px] border-[1px] border-solid border-[#ccc]' type="text" {...register('name', {required: true, minLength: 3})} />
+                    {errors?.name && <p className='text-[red]'>Name is required</p>}
+                </div>
+                <div className="my-4">
+                    <label htmlFor="" className='block '>Price</label>
+                    <input className='w-full pl-2 h-[50px] border-[1px] border-solid border-[#ccc]' type="number" {...register('price', {required: true, minLength: 0})} />
+                    {errors?.price && <p className='text-[red]'>Price is required</p>}
+                </div>
+                <div className="my-4">
+                    <label htmlFor="" className='block '>Image</label>
+                    <input className='w-full pl-2 h-[50px] border-[1px] border-solid border-[#ccc]' type="text" {...register('image', {required: true, minLength: 3})} />
+                    {errors?.image && <p className='text-[red]'>Image is required</p>}
+                </div>
+                <div className="my-4">
+                    <label htmlFor="" className='block '>Quantity</label>
+                    <input className='w-full pl-2 h-[50px] border-[1px] border-solid border-[#ccc]' type="text" {...register('countInStock', {required: true, minLength: 0})} />
+                    {errors?.countInStock && <p className='text-[red]'>Quantity is required</p>}
+                </div>
+                <div className="my-4">
+                    <label htmlFor="" className='block '>Discount</label>
+                    <input className='w-full pl-2 h-[50px] border-[1px] border-solid border-[#ccc]' type="text" {...register('discount', {required: true, minLength: 0})} />
+                    {errors?.discount && <p className='text-[red]'>Discount is required</p>}
+                </div>
+                <div className="my-4">
+                    <label htmlFor="" className='block '>Description</label>
+                    <textarea className='w-full pl-2  border-[1px] border-solid border-[#ccc]' cols={30} rows={10}  {...register('description', {required: true, minLength: 3})} />
+                    {errors?.description && <p className='text-[red]'>Description is required</p>}
+                </div>
+                <div className="my-4">
+                    <button className="p-2 bg-blue-500 rounded text-white hover:opacity-50">Update Product</button>
+                </div>
+            </form>
         </div>
-    );
+    )
 };
 
-export default ProductEditPage;
+export default ProductEdit;

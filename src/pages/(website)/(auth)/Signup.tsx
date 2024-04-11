@@ -1,139 +1,84 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import Joi from "joi";
-import { useForm } from "react-hook-form";
-import { useLocalStorage } from "@/common/hooks/useStorage";
-import "./../../../styles/login.scss";
-import { joiResolver } from "@hookform/resolvers/joi";
+import { useLocalStorage } from '@/common/hooks/useStorage'
+import { joiResolver } from '@hookform/resolvers/joi'
+import { useMutation } from '@tanstack/react-query'
+import axios from 'axios'
+import Joi from 'joi'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 
-// Xác định schema cho dữ liệu đăng ký
-const signupSchema = Joi.object({
-    name: Joi.string().required(),
+const signinSchema = Joi.object({
+    name: Joi.string().min(3).required(),
     email: Joi.string()
         .email({ tlds: { allow: false } })
         .min(3)
         .required(),
     password: Joi.string().min(6).required(),
-    confirmPassword: Joi.string()
-        .valid(Joi.ref("password"))
-        .required()
-        .label("Confirm Password")
-        .messages({
-            "any.only": "Passwords do not match",
-        }),
-});
+    confirmPassword: Joi.string().required().valid(Joi.ref("password"))
+})
 
 const Signup = () => {
-    const navigate = useNavigate();
-    const [, setUser] = useLocalStorage("user", {});
+    const [, setUser] = useLocalStorage('user', {})
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors }
     } = useForm({
-        resolver: joiResolver(signupSchema),
+        resolver: joiResolver(signinSchema),
         defaultValues: {
-            name: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-        },
-    });
-
+            name:'',
+            email: '',
+            password: '',
+            confirmPassword: '',
+        }
+    })
+    const navigate = useNavigate();
     const { mutate } = useMutation({
-        mutationFn: async (formData) => {
-            const response = await axios.post(
-                "http://localhost:8080/api/v1/auth/signup",
-                formData,
-            );
-            return response.data;
+        mutationFn: async (formData: { email: string; password: string }) => {
+            const { data } = await axios.post('http://localhost:8080/api/v1/auth/signup', formData)
+            return data
         },
-        onSuccess: (data) => {
-            setUser(data);
-            navigate("/signin");
-        },
-        onError: (error) => console.log(error),
-    });
+        onSuccess: (data) => setUser(data),
+        onError: (error) => console.log(error)
+    })
 
-    // Hàm xử lý khi người dùng nhấn submit form
-    const onSubmit = (formData) => {
-        mutate(formData); // Gửi yêu cầu đăng ký thông tin người dùng
-    };
-
+    const onSubmit = (formData: { email: string; password: string }) => {
+        mutate(formData)
+        alert('Đăng kí thành công!');
+        navigate('/signin')
+    }
     return (
-        <div className="container" style={{ marginBottom: "200px" }}>
-            <div className="form">
-                <div className="form-close">
-                    <img src="/close.svg" alt="" />
-                </div>
-                <h1 className="form-title">Sign Up</h1>
-                <form onSubmit={handleSubmit(onSubmit)} method="post">
-                    <div className="form-group">
-                        <label className="form-group__label">Name:</label>{" "}
-                        {/* Thêm trường "Name" */}
-                        <input
-                            {...register("name", { required: true })}
-                            placeholder="Name"
-                            className="form-group__input"
-                            type="text"
-                            id="name"
-                            name="name"
-                            required
-                        />
-                        {errors.name && <p>{errors.name.message}</p>}
-                    </div>
-                    <div className="form-group">
-                        <label className="form-group__label">Email:</label>
-                        <input
-                            {...register("email", { required: true })}
-                            placeholder="Email"
-                            className="form-group__input"
-                            type="email"
-                            id="email"
-                            name="email"
-                            required
-                        />
-                        {errors.email && <p>{errors.email.message}</p>}
-                    </div>
-                    <div className="form-group">
-                        <label className="form-group__label">Password:</label>
-                        <input
-                            type="password"
-                            {...register("password", { required: true })}
-                            placeholder="Password"
-                            className="form-group__input"
-                            id="password"
-                            name="password"
-                            required
-                        />
-                        {errors.password && <p>{errors.password.message}</p>}
-                    </div>
-                    <div className="form-group">
-                        <label className="form-group__label">
-                            Confirm Password:
-                        </label>
-                        <input
-                            type="password"
-                            {...register("confirmPassword", { required: true })}
-                            placeholder="Confirm Password"
-                            className="form-group__input"
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            required
-                        />
-                        {errors.confirmPassword && (
-                            <p>{errors.confirmPassword.message}</p>
-                        )}
-                    </div>
-                    <button type="submit" className="form-button">
-                        Sign Up
-                    </button>
-                </form>
+        <div className='container'>
+           <div className="form-container"> 
+          <h1 className="form-title
+            ">Signup</h1>
+          <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-group">
+              <label>Name</label>
+              <input className='pl-2' type="text" {...register('name', { required: true, minLength: 3 })} placeholder='Name' />
+              {errors.name && <p className='text-[red]'>{errors.name.message}</p>}
             </div>
+            <div className="form-group">
+              <label>Email</label>
+              <input className='pl-2' type="email" {...register('email', { required: true, minLength: 3 })} placeholder='Email' />
+              {errors.email && <p className='text-[red]'>{errors.email.message}</p>}
+            </div>
+            <div className="form-group">
+              <label>Password</label>
+              <input className='pl-2' type="password" {...register('password', { required: true, minLength: 6 })} placeholder='Password'/>
+              {errors.password && <p className='text-[red]'>{errors.password.message}</p>}
+            </div>
+            <div className="form-group">
+              <label>ConFirm Password</label>
+              <input className='pl-2' type="password" {...register('confirmPassword', { required: true, minLength: 6 })} placeholder='Password'/>
+              {errors.confirmPassword && <p className='text-[red]'>{errors.confirmPassword.message}</p>}
+            </div>
+            <button type="submit" className="button">Signup</button>
+           
+          </form>
+        
+      </div>
         </div>
-    );
-};
+    )
+}
 
-export default Signup;
+export default Signup

@@ -1,148 +1,68 @@
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-
-import {
-    ColumnFiltersState,
-    SortingState,
-    VisibilityState,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-} from "@tanstack/react-table";
-import { Plus } from "lucide-react";
-import { Link } from "react-router-dom";
-
-import { useProductQuery } from "@/common/hooks/useProductQuery";
-import { useState } from "react";
-import { columns } from "./Column";
-import DataTable from "./DataTable";
-import FooterTable from "./FooterTable";
-import HeaderTable from "./HeaderTable";
-import { deleteProduct } from "@/services/product";
+import React from 'react';
+import { useProductQuery } from '@/common/hooks/useProductQuery';
+import { Link } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteProduct } from '@/services/product';
 
 const ProductList = () => {
-    const { data, isLoading, refetch } = useProductQuery({
-        _expand: "category",
-    });
-    const [sorting, setSorting] = useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
-        {},
-    );
-    const [rowSelection, setRowSelection] = useState({});
-    const table = useReactTable({
-        data: data?.data ?? [],
-        columns,
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
-        state: {
-            sorting,
-            columnFilters,
-            columnVisibility,
-            rowSelection,
+    const queryClient = useQueryClient();
+    const { data } = useProductQuery();
+    const products = data?.data; // Kiểm tra xem data có tồn tại không trước khi truy cập vào data.data
+
+    const { mutate } = useMutation({
+        mutationFn: async (id: number) => {
+            if(confirm('Bạn có muốn xóa ?')) {
+
+                return await deleteProduct(id);
+            } 
         },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['PRODUCT_KEY']
+            });
+        }
     });
-    const handleDeleteProduct = async (id: string) => {
-        const confirmDelete = window.confirm(
-            "Are you sure you want to delete this product?",
-        );
-        if (!confirmDelete) {
-            return;
-        }
-        try {
-            await deleteProduct(id);
-            refetch();
-            alert("Product deleted successfully!");
-        } catch (error) {
-            console.error("Error deleting product:", error);
-            alert("Error deleting product!");
-        }
-    };
-    const handleEditProduct = (id: string) => {
-        window.location.href = `/admin/products/${id}/edit`;
-    };
+   
     return (
-        <>
-            <div className="flex items-center justify-between py-3">
-                <h2>Product List</h2>
-                <Link to="/admin/products/add" className="flex items-center">
-                    <Button>
-                        <Plus />
-                        Add Product
-                    </Button>
-                </Link>
-            </div>
-            <hr />
-            <div className="my-5">
-                <div className="w-full">
-                    <div className="flex items-center py-4">
-                        <HeaderTable table={table} />
+        <div>
+            <div className="container">
+                <div className="flex justify-between my-2">
+                    <div className="">
+                        <h1 className='text-2xl'>Product List</h1>
                     </div>
-                    <div className="border rounded-md">
-                        {isLoading ? (
-                            <>
-                                <table className="w-full">
-                                    <thead>
-                                        <th>
-                                            <Skeleton className="w-full h-[25px] rounded-full" />
-                                        </th>
-                                        <th>
-                                            <Skeleton className="w-full h-[25px] rounded-full" />
-                                        </th>
-                                        <th>
-                                            <Skeleton className="w-full h-[25px] rounded-full" />
-                                        </th>
-                                        <th>
-                                            <Skeleton className="w-full h-[25px] rounded-full" />
-                                        </th>
-                                        <th>
-                                            <Skeleton className="w-full h-[25px] rounded-full" />
-                                        </th>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <Skeleton className="w-full h-[25px] rounded-full" />
-                                            </td>
-                                            <td>
-                                                <Skeleton className="w-full h-[25px] rounded-full" />
-                                            </td>
-                                            <td>
-                                                <Skeleton className="w-full h-[25px] rounded-full" />
-                                            </td>
-                                            <td>
-                                                <Skeleton className="w-full h-[25px] rounded-full" />
-                                            </td>
-                                            <td>
-                                                <Skeleton className="w-full h-[25px] rounded-full" />
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </>
-                        ) : (
-                            <DataTable
-                                table={table}
-                                columns={columns}
-                                onDeleteProduct={handleDeleteProduct}
-                                onEditProduct={handleEditProduct}
-                            />
-                        )}
-                    </div>
-                    <div className="flex items-center justify-end py-4 space-x-2">
-                        <FooterTable table={table} />
+                    <div className="">
+                        <button className='p-2 bg-black text-white rounded'><Link to='/admin/products/add'>Add Product</Link></button>
                     </div>
                 </div>
+                <table className='w-full'>
+                    <thead>
+                        <tr>
+                            <th className='border border-solid border-gray p-2'>Product</th>
+                            <th className='border border-solid border-gray p-2'>Name</th>
+                            <th className='border border-solid border-gray p-2'>Category</th>
+                            <th className='border border-solid border-gray p-2'>Price</th>
+                            <th className='border border-solid border-gray p-2'>Quantity</th>
+                            <th className='border border-solid border-gray p-2'>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {Array.isArray(products) && products.map((item, index) => (
+                            <tr key={index}>
+                                <td className='border border-solid border-gray p-2 text-center'><img src={item.image} alt={item.name} className='w-[50%] m-auto rounded-full' /></td>
+                                <td className='border border-solid border-gray p-2 text-center'>{item.name}</td>
+                                <td className='border border-solid border-gray p-2 text-center'>{item.category}</td>
+                                <td className='border border-solid border-gray p-2 text-center'>{item.price}$</td>
+                                <td className='border border-solid border-gray p-2 text-center'>{item.countInStock}</td>
+                                <td className='border border-solid border-gray p-2 text-center'>
+                                    <button onClick={() => mutate(item._id)} className='w-[80px] h-[40px] bg-red-700 text-white hover:opacity-50 rounded'>Delete</button>
+                                    <button className='w-[80px] h-[40px] bg-yellow-700 text-white hover:opacity-50 rounded'><Link to={`/admin/products/edit/${item._id}`}>Edit</Link></button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
-        </>
+        </div>
     );
 };
 

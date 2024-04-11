@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './styles/style.scss'
 import './global.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 

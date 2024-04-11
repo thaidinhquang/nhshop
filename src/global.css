@@ -74,7 +74,3 @@
         @apply bg-background text-foreground;
     }
 }
-.bold-label {
-    font-weight: bold;
-    text-align: left;
-}

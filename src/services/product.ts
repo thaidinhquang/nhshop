@@ -1,7 +1,17 @@
 import instance from '@/configs/axios'
 import { IProduct } from '@/common/types/product'
 
-const { token } = JSON.parse(localStorage.getItem('user') || '');
+const userDataString = localStorage.getItem('user');
+let token = '';
+if (userDataString) {
+    try {
+        const userData = JSON.parse(userDataString);
+        token = userData.token || '';
+    } catch (error) {
+        console.error('Không thể phân tích dữ liệu từ localStorage:', error);
+    }
+}
+// const { token } = JSON.parse(localStorage.getItem('user') || '');
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getAllProducts = async (params?: any): Promise<IProduct[]> => {
     try {
@@ -32,37 +42,25 @@ export const addProduct = async (product: IProduct) => {
         console.log(error)
     }
 }
-export const deleteProduct = async (id: string) => {
+export const editProduct = async (product: IProduct) => {
     try {
-        const response = await instance.delete(`/products/${id}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Error deleting product:', error);
-        throw new Error('Error deleting product');
-    }
-};
-export const editProduct = async (product: IProduct): Promise<IProduct> => {
-    try {
-        if (!product || !product._id) {
-            throw new Error('Product or product _id is missing');
-        }
-        
-        const response = await instance.put(`/products/${product._id}`, product, {
+        const response = await instance.put(`/products/${product?._id}`, product, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
+                "Authorization": "Bearer " + token ? token : ''
             },
-        });
-        
-        console.log(response.data);
-        
-        return response.data; 
+        })
+        return response.data
     } catch (error) {
-        console.error('Error editing product:', error);
-        throw new Error('Error editing product');
+        console.log(error)
     }
-};
+}
+
+export const deleteProduct = async (id: number) => {
+    try {
+        const response = await instance.delete(`/products/${id}`)
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}

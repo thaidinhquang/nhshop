@@ -8,16 +8,15 @@ const useCart = () => {
     const queryClient = useQueryClient()
     const [user] = useLocalStorage('user', {})
     const userId = user?.user?._id
-    console.log( useLocalStorage('user', {}));
+
     const { data, ...restQuery } = useQuery({
-        queryKey: ['cart', userId], 
+        queryKey: ['cart', userId],
         queryFn: async () => {
             const { data } = await axios.get(`http://localhost:8080/api/v1/carts/${userId}`)
             return data
-        },     
+        }
     })
-    
-  
+
     const updateQuantityDebounce = debounce(async (productId, quantity: number) => {
         await axios.post(`http://localhost:8080/api/v1/carts/update`, {
             userId,
@@ -29,9 +28,18 @@ const useCart = () => {
         })
     }, 300)
 
+    
     const { mutate } = useMutation({
-        mutationFn: async ({ action, productId,quantity }: { action: string; productId: string,quantity:number }) => {
+        mutationFn: async ({ action, productId, quantity }: { action: string; productId: string; quantity: number }) => {
             switch (action) {
+                case 'ADD-TO-CART': {
+                    await axios.post(`http://localhost:8080/api/v1/carts/add-to-cart`, {
+                        userId,
+                        productId,
+                        quantity
+                    })
+                    break;
+                }
                 case 'INCREMENT':
                     await axios.post(`http://localhost:8080/api/v1/carts/increase`, {
                         userId,
@@ -45,27 +53,27 @@ const useCart = () => {
                     })
                     break
                 case 'REMOVE':
-                    await axios.post(`http://localhost:8080/api/v1/carts/remove`, {
-                        userId,
-                        productId
-                    })
+                    if(confirm('Bạn có muốn xóa ?')){
+
+                        await axios.post(`http://localhost:8080/api/v1/carts/remove`, {
+                            userId,
+                            productId
+                        })
+                    }
                     break
-                case 'ADD':
-                    await axios.post(`http://localhost:8080/api/v1/carts/add-to-cart`, {
-                        userId,
-                        productId,
-                        quantity
-                    })
-                    break;
             }
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ['cart', userId]
-            })
+       onSuccess: (data, variables) => {
+        const {action} = variables
+        queryClient.invalidateQueries({
+            queryKey: ['cart', userId]
+        });
+        if (action === 'ADD-TO-CART') {
+            alert('Thêm sản phẩm vào giỏ hàng thành công');
         }
+    }
     })
-
+    
     const handleQuantityChange = (productId: string, e: ChangeEvent<HTMLInputElement>) => {
         const quantity = parseInt(e.target.value)
         updateQuantityDebounce(productId, quantity)
@@ -74,12 +82,35 @@ const useCart = () => {
         if (!data || !data.products) return 0
         return reduce(data.products, (total, product) => total + product.price * product.quantity, 0)
     }
+    const getPayment = (paymentMethod: any) => {
+        switch(paymentMethod) {
+            case 'cash': 
+                return "Trả tiền khi nhận hàng"
+            case 'bank':
+                return "Thanh toán bằng tài khoản ngân hàng"
+            default: "Không xác định"
+        }
+    }
+    const calculateTotalProducts = (data: any) => {
+        if (!data || !data.items) return 0;
 
+        let totalProducts = 0;
+
+        data.items.forEach(item => {
+            totalProducts += item.quantity; 
+        });
+        
+        return totalProducts;
+        };
+    
+  
     return {
         data,
         mutate,
         calculateTotal,
+        calculateTotalProducts,
         handleQuantityChange,
+        getPayment,
         ...restQuery
     }
 }

@@ -12,12 +12,12 @@ import { Input } from "@/components/ui/input";
 const HeaderTable = ({ table }: any) => {
     return (
         <>
-            <Input placeholder="Filter name..." className="max-w-sm" />
+            <Input placeholder="Filter emails..." className="max-w-sm" />
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="outline" className="ml-auto">
                         Tùy chỉnh cột
-                        <ChevronDown className="w-4 h-4 ml-2" />
+                        <ChevronDown className="ml-2 h-4 w-4" />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">

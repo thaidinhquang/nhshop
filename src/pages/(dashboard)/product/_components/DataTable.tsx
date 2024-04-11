@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { flexRender } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
 
 import {
     Table,
@@ -9,25 +9,52 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { toast } from "@/components/ui/use-toast";
+import { deleteProduct } from "@/services/product";
+import { Link, useParams } from "react-router-dom";
+const DataTable = ({ table, columns }: any) => {
+    const queryClient = useQueryClient();
+    const { register, handleSubmit, reset } = useForm();
+    const mutation = useMutation({
+        mutationFn: async (id: number) => {
+            if(confirm('Bạn có muốn xóa ?')){
+                const { data } = await deleteProduct(id);
+                return data;
+            }
+        },
+        onSuccess: () => {
+            reset();
+            toast({
+                title: "Xóa sản phẩm thành công",
+                variant: "success",
+            });
+            queryClient.invalidateQueries();
+        },
+    });
 
-const DataTable = ({ table, columns, onDeleteProduct, onEditProduct }: any) => {
+    const handleDelete = (id: number) => {
+        mutation.mutate(id);
+    }
     return (
         <Table>
             <TableHeader>
                 {table.getHeaderGroups().map((headerGroup: any) => (
                     <TableRow key={headerGroup.id}>
-                        {headerGroup.headers.map((header: any) => (
-                            <TableHead key={header.id}>
-                                {header.isPlaceholder
-                                    ? null
-                                    : flexRender(
-                                          header.column.columnDef.header,
-                                          header.getContext(),
-                                      )}
-                            </TableHead>
-                        ))}
-                        <TableHead>Action</TableHead>{" "}
-                        {/* Thêm tiêu đề cột Action */}
+                        {headerGroup.headers.map((header: any) => {
+                            return (
+                                <TableHead key={header.id}>
+                                    {header.isPlaceholder
+                                        ? null
+                                        : flexRender(
+                                              header.column.columnDef.header,
+                                              header.getContext(),
+                                          )}
+                                </TableHead>
+                            );
+                        })}
+                        <TableHead key="delete" >Action</TableHead>
                     </TableRow>
                 ))}
             </TableHeader>
@@ -46,24 +73,8 @@ const DataTable = ({ table, columns, onDeleteProduct, onEditProduct }: any) => {
                                     )}
                                 </TableCell>
                             ))}
-                            <TableCell>
-                                {/* Thêm nút xóa và gọi hàm xóa sản phẩm khi nút được nhấn */}
-                                <Button
-                                    className="mb-2 bg-red-700  w-[60px]"
-                                    onClick={() =>
-                                        onDeleteProduct(row.original._id)
-                                    }
-                                >
-                                    Delete
-                                </Button>
-                                <Button
-                                    className="mr-2 bg-green-700 w-[60px]"
-                                    onClick={() =>
-                                        onEditProduct(row.original._id)
-                                    }
-                                >
-                                    Edit
-                                </Button>
+                             <TableCell key="delete">
+                            <button onClick={() => handleDelete(row.original._id)} className="bg-red-600 p-2  text-white rounded">Delete</button>
                             </TableCell>
                         </TableRow>
                     ))

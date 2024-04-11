@@ -1,6 +1,6 @@
 "use client";
 
-import { BarChart, List } from "lucide-react";
+import { BarChart, CarTaxiFront, Cat, Grid, List, User } from "lucide-react";
 import SidebarItem from "./SidebarItem";
 
 const routes = [
@@ -13,6 +13,21 @@ const routes = [
         icon: List,
         label: "Sản phẩm",
         href: "/admin/products",
+    },
+    {
+        icon: Grid,
+        label: "Danh mục",
+        href: "/admin/category",
+    },
+    {
+        icon: User,
+        label: "Tài khoản",
+        href: "/admin/user",
+    },
+    {
+        icon: CarTaxiFront,
+        label: "Đơn hàng",
+        href: "/admin/order",
     },
 ];
 

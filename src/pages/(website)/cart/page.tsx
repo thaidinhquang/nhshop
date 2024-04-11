@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import useCart from '@/common/hooks/useCart'
-import { ChangeEvent } from 'react'
+import { Service1, Service2, Service3 } from '@/upload'
+import { Link } from 'react-router-dom'
+import Banner from '../home/_component/Banner'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
 
 const CartPage = () => {
     const { data, mutate, handleQuantityChange, calculateTotal, isLoading, isError } = useCart()
@@ -9,28 +13,42 @@ const CartPage = () => {
     if (isError) return <p>Error</p>
 
     return (
-        <div className='container'>
-            <table className='w-full'>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Tên sản phẩm</th>
-                        <th>Giá</th>
-                        <th>Số lượng</th>
-                        <th>Tổng giá</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data?.products.map((product: any, index: number) => {
-                        return (
-                            <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td className='border-2'>{product.name}</td>
-                                <td className='border-2'>{product.price}</td>
-                                <td className='border-2'>
-                                    <button
-                                        className='py-2 px-4 bg-slate-400'
+      <div className="">
+          <Banner />
+      <div className="container cart">
+        <div className=" cart__container">
+          <table className="cart-table">
+            <thead>
+              <tr className='cart-table__head'>
+                <td className='cart-table__header'></td>
+                <td className='cart-table__header'>Product</td>
+                <td className='cart-table__header'>Price</td>
+                <td className='cart-table__header'>Quantity</td>
+                <td className='cart-table__header'>Subtotal</td>
+                <td className='cart-table__header'></td>
+              </tr>
+            </thead>
+            <tbody className="cart-table__body">
+            {data?.products.map((product: any, index: number) => (
+
+              <tr className="cart-table__row" key={index}>
+                  <td className=" text-center cart-table__img">
+                      <img
+                      src={product.image}
+                      alt="ảnh"
+                      className="cart-table__img"
+                    />
+                  </td>
+                <td className=" text-center cart-table__data">
+                  <div className="cart-table__test">
+                   
+                    <span className="cart-table__note">{product.name}</span>
+                  </div>
+                </td>
+                <td className=" text-center cart-table__data cart-table__price">{product.price}$</td>
+                <td className=" text-center cart-table__data cart-table__quantity">
+                <button
+                                        className='py-2 px-4 bg-[#f9f1e7]'
                                         onClick={() =>
                                             mutate({
                                                 action: 'DECREMENT',
@@ -38,31 +56,13 @@ const CartPage = () => {
                                             })
                                         }
                                     >
-                                        <svg
-                                            xmlns='http://www.w3.org/2000/svg'
-                                            fill='none'
-                                            viewBox='0 0 24 24'
-                                            strokeWidth={1.5}
-                                            stroke='currentColor'
-                                            className='w-6 h-6'
+                                        <FontAwesomeIcon icon={faMinus}
                                         >
-                                            <path
-                                                strokeLinecap='round'
-                                                strokeLinejoin='round'
-                                                d='m19.5 8.25-7.5 7.5-7.5-7.5'
-                                            />
-                                        </svg>
+                                        </FontAwesomeIcon>
                                     </button>
                                     {product.quantity}
-                                    <input
-                                        type='number'
-                                        className='border border-red-100'
-                                        onInput={(e) =>
-                                            handleQuantityChange(product.productId, e as ChangeEvent<HTMLInputElement>)
-                                        }
-                                    />
                                     <button
-                                        className='py-2 px-4 bg-emerald-400'
+                                        className='py-2 px-4 bg-[#f9f1e7]'
                                         onClick={() =>
                                             mutate({
                                                 action: 'INCREMENT',
@@ -70,25 +70,18 @@ const CartPage = () => {
                                             })
                                         }
                                     >
-                                        <svg
-                                            xmlns='http://www.w3.org/2000/svg'
-                                            fill='none'
-                                            viewBox='0 0 24 24'
-                                            strokeWidth={1.5}
-                                            stroke='currentColor'
-                                            className='w-6 h-6'
+                                       <FontAwesomeIcon icon={faPlus}
                                         >
-                                            <path
-                                                strokeLinecap='round'
-                                                strokeLinejoin='round'
-                                                d='m4.5 15.75 7.5-7.5 7.5 7.5'
-                                            />
-                                        </svg>
+                                        </FontAwesomeIcon>
                                     </button>
-                                </td>
-                                <td className='border-2'>{product.price * product.quantity}</td>
-                                <td className='border-2'>
-                                    <button
+                </td>
+                <td className=" text-center cart-table__data">
+                  <div className="cart-table__total">
+                   {product.price * product.quantity}$
+                   
+                  </div>
+                </td>
+                <td><button
                                         className='py-2 px-4 bg-red-500 text-white rounded-sm'
                                         onClick={() =>
                                             mutate({
@@ -98,16 +91,71 @@ const CartPage = () => {
                                         }
                                     >
                                         Xóa
-                                    </button>
-                                </td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
-            <p>Total: ${calculateTotal()}</p>
+                                    </button></td>
+              </tr>
+            ))}
+  
+            </tbody>
+          </table>
+          
+        <div className="cart-totals">
+            
+          <div className="">
+              <p className="cart-totals__name">Cart Totals</p>
+
+              <div className="">
+                <div className="cart-totals__subtotal">
+                <p>Subtotal</p>
+                <span>{calculateTotal()}$</span>
+              </div>
+              <div className="cart-totals__total">
+                <p>Total:</p>
+                <span>{calculateTotal()}$</span>
+              </div>
+              </div>
+              <button className="cart-totals__checkOut"><Link to={`/order`}>Check Out</Link></button>
+            </div>
+          </div>
         </div>
+      </div>
+        <div className='service-list my-4'>
+                    <div className='service-item'>
+                        <img src={Service1} className='service__image' />
+                        <div className='service-info'>
+                            <h4 className='service__name'>High Quality</h4>
+                            <p className='service__description'>crafted from top materials</p>
+                        </div>
+                    </div>
+                    {/*End service-item*/}
+                    <div className='service-item'>
+                        <img src={Service2} className='service__image' />
+                        <div className='service-info'>
+                            <h4 className='service__name'>High Quality</h4>
+                            <p className='service__description'>crafted from top materials</p>
+                        </div>
+                    </div>
+                    {/*End service-item*/}
+                    <div className='service-item'>
+                        <img src={Service3} className='service__image' />
+                        <div className='service-info'>
+                            <h4 className='service__name'>High Quality</h4>
+                            <p className='service__description'>crafted from top materials</p>
+                        </div>
+                    </div>
+                    {/*End service-item*/}
+                    <div className='service-item'>
+                        <img src={Service1} className='service__image' />
+                        <div className='service-info'>
+                            <h4 className='service__name'>High Quality</h4>
+                            <p className='service__description'>crafted from top materials</p>
+                        </div>
+                    </div>
+                    {/*End service-item*/}
+          </div>
+      </div>
     )
 }
 
 export default CartPage
+
+
