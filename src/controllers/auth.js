@@ -31,6 +31,26 @@ const signupSchema = Joi.object({
     }),
 });
 
+export const getAllUser = async (req, res) => {
+    try {
+        const users = await User.find({});
+        if (users.length === 0) {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: "Không tài khoản nào!" });
+        }
+        return res.status(StatusCodes.OK).json(users);
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+    }
+};
+
+export const deleteUser = async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.params.id);
+        return res.status(StatusCodes.OK).json(category);
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
+    }
+};
 export const signup = async (req, res) => {
     const { email, password, name, avatar } = req.body;
     const { error } = signupSchema.validate(req.body, { abortEarly: false });

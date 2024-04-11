@@ -78,5 +78,4 @@ export const related = async (req, res) => {
     } catch (error) {}
 };
 
-// iphone 13 product max => /product/iphone-13-product-max
-// GET /product/:slug
+
